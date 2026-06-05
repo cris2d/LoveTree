@@ -1,22 +1,22 @@
-// 霸都丶傲天 2019/7/9  https://Github.com/AJLoveChina
+// Configuração personalizada
 var config = {
-    // 下面的句子不一定非要7句， 你也可以改成4句，2句话都可以
+    // As frases abaixo não precisam ser exatamente 7, 
+    // você pode colocar 4, 2 ou quantas quiser
     lines: [
-        "亲爱的雯雯",
-        "花开一季，有落红为证",
-        "逝去的岁月，如何能托于烟尘",
-        "你的浅笑，是我永生眷恋",
-        "相思的真情，是否能明白一二",
-        "亲爱的宝贝，你是我的唯一",
-        "爱你永远。。。",
+        "Meu amor,",
+        "As flores desabrocham numa estação, as pétalas caídas são testemunhas",
+        "Os anos que se foram, como confiar à poeira do tempo",
+        "Seu sorriso suave, é o que meu coração guarda para sempre",
+        "A saudade sincera, será que você entende um pouco?",
+        "Meu querido(a), você é meu único(a)",
+        "Te amo para sempre...",
     ],
-    // 相爱的时间 记住格式不能写错了, 非常重要
-    // 格式一定要和下面这个时间格式一样
-    // 分别是 年-月-日T时时:分分:秒秒
-    //      温馨警告:
-    //          1.时分秒都必须是俩个数字  比如 00:00:00
-    //          2.T不能丢了
+    // Data em que se apaixonaram - IMPORTANTE: não altere o formato!
+    // Formato: Ano-Mês-DiaThora:minuto:segundo
+    //      Avisos importantes:
+    //          1. Horas, minutos e segundos devem ter sempre dois dígitos  ex: 00:00:00
+    //          2. O "T" não pode ser removido
     date: "2017-07-20T20:15:00",
-    // 双方的名字
-    names: ["笨笨熊", "黑猪猪"]
+    // Nome dos dois
+    names: ["Fulano", "Ciclana"]
 }
