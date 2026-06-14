@@ -2,7 +2,6 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Our Story</title>
 
     <link type="text/css" rel="stylesheet" href="./index_files/default.css">
@@ -21,27 +20,8 @@
         .STYLE1 {
             color: #666666
         }
+
         -->
-    </style>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        #main, #wrap {
-            width: 100%;
-            height: 100%;
-        }
-        #canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
     </style>
 </head>
 <body>
@@ -68,28 +48,33 @@
 </style>
 
 <div id="main">
-    <div id="error">Este página usa HTML5. Seu navegador não suporta, por favor use o Chrome ou Firefox.</div>
+    <div id="error">本页面采用HTML5编辑，目前您的浏览器无法显示，请换成谷歌(<a
+            href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a
+            href="http://firefox.com.cn/download/">Firefox</a>)浏览器，或者其他游览器的最新版本。
+    </div>
     <div id="wrap">
         <div id="text">
             <div id="code">
             </div>
         </div>
         <div id="clock-box">
-            <span id="clock-box-inside-text"></span>
+                    <span id="clock-box-inside-text">
+					</span>
             <div id="clock"></div>
         </div>
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas" width="1100" height="680"></canvas>
     </div>
+
 </div>
 
 <script type="text/javascript">
     $('#code').html(config.lines.map(item => {
         return `<span class="say">${item}</span><br>
-                <span class="say"> </span><br>`
+						<span class="say"> </span><br>`
     }).reduce((a, b) => {
         return a + b;
     }))
-    $("#clock-box-inside-text").html(`${config.names[0]}<span class="STYLE1"> e </span> ${config.names[1]}<span class="STYLE1"> já estão juntos há</span>`)
+    $("#clock-box-inside-text").html(`${config.names[0]}<span class="STYLE1">与</span> ${config.names[1]}<span class="STYLE1">已经相恋了</span>`)
 </script>
 
 <script>
@@ -101,8 +86,8 @@
             return false;
         }
 
-        var width = window.innerWidth;
-        var height = window.innerHeight;
+        var width = canvas.width();
+        var height = canvas.height();
 
         canvas.attr("width", width);
         canvas.attr("height", height);
@@ -133,11 +118,11 @@
             ],
             bloom: {
                 num: 700,
-                width: width,
-                height: height,
+                width: 1080,
+                height: 650,
             },
             footer: {
-                width: width + 100,
+                width: 1200,
                 height: 5,
                 speed: 10,
             }
@@ -204,6 +189,7 @@
             foot.draw();
             tree.snapshot("p2", 500, 0, 610, 680);
 
+            // 会有闪烁不得意这样做, (＞﹏＜)
             canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
             canvas.css("background", "#ffe");
             $await(Jscex.Async.sleep(300));
@@ -245,6 +231,7 @@
         runAsync().start();
     })();
 </script>
+
 
 </body>
 </html>
