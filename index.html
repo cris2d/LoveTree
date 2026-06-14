@@ -2,7 +2,6 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- META RESPONSIVO: essencial para mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Story</title>
 
@@ -19,55 +18,129 @@
     <script type="text/javascript" src="./config.js"></script>
     <style type="text/css">
         .STYLE1 { color: #666666 }
+
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: #ffe;
+        }
+
+        #main {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* O wrap mantém 1100x680 internamente mas é escalado via JS */
+        #wrap {
+            position: relative;
+            width: 1100px;
+            height: 680px;
+            transform-origin: top left;
+            /* scale aplicado via JS */
+        }
+
+        #text {
+            width: 400px;
+            height: 425px;
+            left: 60px;
+            top: 80px;
+            position: absolute;
+            z-index: 10;
+        }
+
+        #code {
+            display: none;
+            font-size: 16px;
+        }
+
+        #clock-box {
+            position: absolute;
+            left: 60px;
+            top: 550px;
+            font-size: 28px;
+            display: none;
+            z-index: 10;
+        }
+
+        #clock-box a { font-size: 28px; text-decoration: none; }
+        #clock { margin-left: 48px; }
+        #clock .digit { font-size: 64px; }
+
+        #canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 1100px;
+            height: 680px;
+        }
+
+        #error { margin: 0 auto; text-align: center; margin-top: 60px; display: none; }
+        .hand { cursor: pointer; }
+        .say { margin-left: 5px; }
+
+        .rotateImages {
+            -webkit-animation: myRotate 10s linear infinite;
+            animation: myRotate 10s linear infinite;
+        }
+        @keyframes myRotate {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-<img src="https://ajlovechina.github.io/loveBalloon/static/music.png" style="position: fixed;z-index: 10001;top:10px;right:10px;width:36px;height:36px;" onclick="let m = document.querySelector('.song-audio-autoplay'); if (m.paused ) {m.play(); this.className = 'rotateImages'} else {m.pause(); this.className = ''}">
-<audio class="song-audio-autoplay" controls loop style="display: none;visibility: hidden">
+<img id="music-btn" src="https://ajlovechina.github.io/loveBalloon/static/music.png"
+     style="position:fixed;z-index:10001;top:10px;right:10px;width:36px;height:36px;"
+     onclick="var m=document.querySelector('.song-audio-autoplay');if(m.paused){m.play();this.className='rotateImages'}else{m.pause();this.className=''}">
+<audio class="song-audio-autoplay" controls loop style="display:none;visibility:hidden">
     <source src="./index_files/music.mp3" type="audio/mp3"/>
 </audio>
-<style type="text/css">
-    .rotateImages{
-        -webkit-animation:myRotate 10s linear infinite;
-        animation:myRotate 10s linear infinite;
-    }
-    @-webkit-keyframes myRotate{
-        0%{ -webkit-transform: rotate(0deg);}
-        50%{ -webkit-transform: rotate(180deg);}
-        100%{ -webkit-transform: rotate(360deg);}
-    }
-    @keyframes myRotate{
-        0%{ -webkit-transform: rotate(0deg);}
-        50%{ -webkit-transform: rotate(180deg);}
-        100%{ -webkit-transform: rotate(360deg);}
-    }
-</style>
 
 <div id="main">
-    <div id="error">本页面采用HTML5编辑，目前您的浏览器无法显示，请换成谷歌(<a
-            href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a
-            href="http://firefox.com.cn/download/">Firefox</a>)浏览器，或者其他游览器的最新版本。
-    </div>
+    <div id="error">Seu navegador não suporta HTML5 Canvas. Por favor use Chrome ou Firefox.</div>
     <div id="wrap">
         <div id="text">
-            <div id="code">
-            </div>
+            <div id="code"></div>
         </div>
         <div id="clock-box">
             <span id="clock-box-inside-text"></span>
             <div id="clock"></div>
         </div>
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas" width="1100" height="680"></canvas>
     </div>
 </div>
 
 <script type="text/javascript">
-    $('#code').html(config.lines.map(item => {
-        return `<span class="say">${item}</span><br><span class="say"> </span><br>`
-    }).reduce((a, b) => a + b))
+    // Escala o #wrap para caber na tela mantendo proporção 1100x680
+    (function scaleWrap() {
+        var wrap = document.getElementById('wrap');
+        var scaleX = window.innerWidth / 1100;
+        var scaleY = window.innerHeight / 680;
+        var scale = Math.min(scaleX, scaleY);
+        wrap.style.transform = 'scale(' + scale + ')';
+        wrap.style.webkitTransform = 'scale(' + scale + ')';
+        // Centraliza
+        var offsetX = (window.innerWidth - 1100 * scale) / 2;
+        var offsetY = (window.innerHeight - 680 * scale) / 2;
+        wrap.style.marginLeft = offsetX + 'px';
+        wrap.style.marginTop = offsetY + 'px';
+    })();
 
-    $("#clock-box-inside-text").html(`${config.names[0]}<span class="STYLE1">与</span> ${config.names[1]}<span class="STYLE1">已经相恋了</span>`)
+    // Monta o texto
+    $('#code').html(config.lines.map(function(item) {
+        return '<span class="say">' + item + '</span><br><span class="say"> </span><br>';
+    }).join(''));
+
+    // Monta os nomes — suporta tanto array quanto string separada por "e"
+    var name0 = Array.isArray(config.names) ? config.names[0] : (config.names || '');
+    var name1 = Array.isArray(config.names) ? config.names[1] : '';
+    if (name1) {
+        $("#clock-box-inside-text").html(name0 + '<span class="STYLE1"> e </span>' + name1 + '<span class="STYLE1"> estão juntos há</span>');
+    } else {
+        $("#clock-box-inside-text").html(name0 + '<span class="STYLE1"> estão juntos há</span>');
+    }
 </script>
 
 <script>
@@ -79,20 +152,12 @@
             return false;
         }
 
-        // Pega o tamanho real da tela
-        var width = window.innerWidth;
-        var height = window.innerHeight;
+        // Canvas interno sempre 1100x680 — o scale no CSS cuida do resto
+        var width = 1100;
+        var height = 680;
 
         canvas.attr("width", width);
         canvas.attr("height", height);
-
-        // Escala proporcional baseada na largura original (1100px)
-        var scale = width / 1100;
-
-        // Função para escalar coordenadas X (original 1100 -> largura real)
-        function sx(v) { return Math.round(v * scale); }
-        // Função para escalar coordenadas Y (original 680 -> altura real)
-        function sy(v) { return Math.round(v * (height / 680)); }
 
         var opts = {
             seed: {
@@ -101,39 +166,53 @@
                 scale: 2
             },
             branch: [
-                [sx(535), sy(680), sx(570), sy(250), sx(500), sy(200), 30, 100, [
-                    [sx(540), sy(500), sx(455), sy(417), sx(340), sy(400), 13, 100, [
-                        [sx(450), sy(435), sx(434), sy(430), sx(394), sy(395), 2, 40]
+                [535, 680, 570, 250, 500, 200, 30, 100, [
+                    [540, 500, 455, 417, 340, 400, 13, 100, [
+                        [450, 435, 434, 430, 394, 395, 2, 40]
                     ]],
-                    [sx(550), sy(445), sx(600), sy(356), sx(680), sy(345), 12, 100, [
-                        [sx(578), sy(400), sx(648), sy(409), sx(661), sy(426), 3, 80]
+                    [550, 445, 600, 356, 680, 345, 12, 100, [
+                        [578, 400, 648, 409, 661, 426, 3, 80]
                     ]],
-                    [sx(539), sy(281), sx(537), sy(248), sx(534), sy(217), 3, 40],
-                    [sx(546), sy(397), sx(413), sy(247), sx(328), sy(244), 9, 80, [
-                        [sx(427), sy(286), sx(383), sy(253), sx(371), sy(205), 2, 40],
-                        [sx(498), sy(345), sx(435), sy(315), sx(395), sy(330), 4, 60]
+                    [539, 281, 537, 248, 534, 217, 3, 40],
+                    [546, 397, 413, 247, 328, 244, 9, 80, [
+                        [427, 286, 383, 253, 371, 205, 2, 40],
+                        [498, 345, 435, 315, 395, 330, 4, 60]
                     ]],
-                    [sx(546), sy(357), sx(608), sy(252), sx(678), sy(221), 6, 100, [
-                        [sx(590), sy(293), sx(646), sy(277), sx(648), sy(271), 2, 80]
+                    [546, 357, 608, 252, 678, 221, 6, 100, [
+                        [590, 293, 646, 277, 648, 271, 2, 80]
                     ]]
                 ]]
             ],
             bloom: {
                 num: 700,
-                width: width - 20,
-                height: height - 30,
+                width: 1080,
+                height: 650,
             },
             footer: {
-                width: width + 100,
+                width: 1200,
                 height: 5,
                 speed: 10,
             }
-        }
+        };
 
         var tree = new Tree(canvas[0], width, height, opts);
         var seed = tree.seed;
         var foot = tree.footer;
         var hold = 1;
+
+        // Fator de escala para converter coordenadas de toque (tela) → canvas (1100x680)
+        function getTouchCanvasPos(touch) {
+            var wrap = document.getElementById('wrap');
+            var scaleX = window.innerWidth / 1100;
+            var scaleY = window.innerHeight / 680;
+            var scale = Math.min(scaleX, scaleY);
+            var offsetX = (window.innerWidth - 1100 * scale) / 2;
+            var offsetY = (window.innerHeight - 680 * scale) / 2;
+            return {
+                x: (touch.pageX - offsetX) / scale,
+                y: (touch.pageY - offsetY) / scale
+            };
+        }
 
         canvas.click(function (e) {
             var offset = canvas.offset(), x, y;
@@ -152,16 +231,12 @@
             canvas.toggleClass('hand', seed.hover(x, y));
         });
 
-        // Suporte a toque (mobile) — qualquer toque na tela inicia a animação
-        canvas[0].addEventListener('touchstart', function(e) {
-            e.preventDefault();
+        // Toque no celular — qualquer lugar da tela inicia a animação
+        document.addEventListener('touchstart', function(e) {
             if (hold) {
                 hold = 0;
-                canvas.unbind("click");
-                canvas.unbind("mousemove");
-                canvas.removeClass('hand');
             }
-        }, { passive: false });
+        }, { passive: true });
 
         var seedAnimate = eval(Jscex.compile("async", function () {
             seed.draw();
@@ -194,14 +269,13 @@
         }));
 
         var moveAnimate = eval(Jscex.compile("async", function () {
-            var moveX = Math.round(width * 0.45);
-            tree.snapshot("p1", Math.round(width * 0.22), 0, Math.round(width * 0.55), height);
-            while (tree.move("p1", moveX, 0)) {
+            tree.snapshot("p1", 240, 0, 610, 680);
+            while (tree.move("p1", 500, 0)) {
                 foot.draw();
                 $await(Jscex.Async.sleep(10));
             }
             foot.draw();
-            tree.snapshot("p2", moveX, 0, Math.round(width * 0.55), height);
+            tree.snapshot("p2", 500, 0, 610, 680);
 
             canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
             canvas.css("background", "#ffe");
@@ -220,7 +294,6 @@
 
         var textAnimate = eval(Jscex.compile("async", function () {
             var together = new Date(config.date);
-
             $("#code").show().typewriter();
             $("#clock-box").fadeIn(500);
             while (true) {
@@ -234,9 +307,7 @@
             $await(growAnimate());
             $await(flowAnimate());
             $await(moveAnimate());
-
             textAnimate().start();
-
             $await(jumpAnimate());
         }));
 
