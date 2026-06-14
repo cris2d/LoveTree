@@ -2,7 +2,8 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=1100">
+    <!-- META RESPONSIVO: essencial para mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Story</title>
 
     <link type="text/css" rel="stylesheet" href="./index_files/default.css">
@@ -17,17 +18,12 @@
     <script type="text/javascript" src="./index_files/love.js" charset="utf-8"></script>
     <script type="text/javascript" src="./config.js"></script>
     <style type="text/css">
-        <!--
-        .STYLE1 {
-            color: #666666
-        }
-
-        -->
+        .STYLE1 { color: #666666 }
     </style>
 </head>
 <body>
 
-<img src="https://ajlovechina.github.io/loveBalloon/static/music.png" style="position: fixed;z-index: 10001;top:10px;right:10px;" onclick="let m = document.querySelector('.song-audio-autoplay'); if (m.paused ) {m.play(); this.className = 'rotateImages'} else {m.pause(); this.className = ''}">
+<img src="https://ajlovechina.github.io/loveBalloon/static/music.png" style="position: fixed;z-index: 10001;top:10px;right:10px;width:36px;height:36px;" onclick="let m = document.querySelector('.song-audio-autoplay'); if (m.paused ) {m.play(); this.className = 'rotateImages'} else {m.pause(); this.className = ''}">
 <audio class="song-audio-autoplay" controls loop style="display: none;visibility: hidden">
     <source src="./index_files/music.mp3" type="audio/mp3"/>
 </audio>
@@ -59,22 +55,18 @@
             </div>
         </div>
         <div id="clock-box">
-                    <span id="clock-box-inside-text">
-					</span>
+            <span id="clock-box-inside-text"></span>
             <div id="clock"></div>
         </div>
-        <canvas id="canvas" width="1100" height="680"></canvas>
+        <canvas id="canvas"></canvas>
     </div>
-
 </div>
 
 <script type="text/javascript">
     $('#code').html(config.lines.map(item => {
-        return `<span class="say">${item}</span><br>
-						<span class="say"> </span><br>`
-    }).reduce((a, b) => {
-        return a + b;
-    }))
+        return `<span class="say">${item}</span><br><span class="say"> </span><br>`
+    }).reduce((a, b) => a + b))
+
     $("#clock-box-inside-text").html(`${config.names[0]}<span class="STYLE1">与</span> ${config.names[1]}<span class="STYLE1">已经相恋了</span>`)
 </script>
 
@@ -87,11 +79,20 @@
             return false;
         }
 
-        var width = canvas.width();
-        var height = canvas.height();
+        // Pega o tamanho real da tela
+        var width = window.innerWidth;
+        var height = window.innerHeight;
 
         canvas.attr("width", width);
         canvas.attr("height", height);
+
+        // Escala proporcional baseada na largura original (1100px)
+        var scale = width / 1100;
+
+        // Função para escalar coordenadas X (original 1100 -> largura real)
+        function sx(v) { return Math.round(v * scale); }
+        // Função para escalar coordenadas Y (original 680 -> altura real)
+        function sy(v) { return Math.round(v * (height / 680)); }
 
         var opts = {
             seed: {
@@ -100,30 +101,30 @@
                 scale: 2
             },
             branch: [
-                [535, 680, 570, 250, 500, 200, 30, 100, [
-                    [540, 500, 455, 417, 340, 400, 13, 100, [
-                        [450, 435, 434, 430, 394, 395, 2, 40]
+                [sx(535), sy(680), sx(570), sy(250), sx(500), sy(200), 30, 100, [
+                    [sx(540), sy(500), sx(455), sy(417), sx(340), sy(400), 13, 100, [
+                        [sx(450), sy(435), sx(434), sy(430), sx(394), sy(395), 2, 40]
                     ]],
-                    [550, 445, 600, 356, 680, 345, 12, 100, [
-                        [578, 400, 648, 409, 661, 426, 3, 80]
+                    [sx(550), sy(445), sx(600), sy(356), sx(680), sy(345), 12, 100, [
+                        [sx(578), sy(400), sx(648), sy(409), sx(661), sy(426), 3, 80]
                     ]],
-                    [539, 281, 537, 248, 534, 217, 3, 40],
-                    [546, 397, 413, 247, 328, 244, 9, 80, [
-                        [427, 286, 383, 253, 371, 205, 2, 40],
-                        [498, 345, 435, 315, 395, 330, 4, 60]
+                    [sx(539), sy(281), sx(537), sy(248), sx(534), sy(217), 3, 40],
+                    [sx(546), sy(397), sx(413), sy(247), sx(328), sy(244), 9, 80, [
+                        [sx(427), sy(286), sx(383), sy(253), sx(371), sy(205), 2, 40],
+                        [sx(498), sy(345), sx(435), sy(315), sx(395), sy(330), 4, 60]
                     ]],
-                    [546, 357, 608, 252, 678, 221, 6, 100, [
-                        [590, 293, 646, 277, 648, 271, 2, 80]
+                    [sx(546), sy(357), sx(608), sy(252), sx(678), sy(221), 6, 100, [
+                        [sx(590), sy(293), sx(646), sy(277), sx(648), sy(271), 2, 80]
                     ]]
                 ]]
             ],
             bloom: {
                 num: 700,
-                width: 1080,
-                height: 650,
+                width: width - 20,
+                height: height - 30,
             },
             footer: {
-                width: 1200,
+                width: width + 100,
                 height: 5,
                 speed: 10,
             }
@@ -150,6 +151,18 @@
             y = e.pageY - offset.top;
             canvas.toggleClass('hand', seed.hover(x, y));
         });
+
+        // Suporte a toque (mobile)
+        canvas[0].addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            var touch = e.touches[0];
+            var offset = canvas.offset();
+            var x = touch.pageX - offset.left;
+            var y = touch.pageY - offset.top;
+            if (seed.hover(x, y)) {
+                hold = 0;
+            }
+        }, { passive: false });
 
         var seedAnimate = eval(Jscex.compile("async", function () {
             seed.draw();
@@ -182,15 +195,15 @@
         }));
 
         var moveAnimate = eval(Jscex.compile("async", function () {
-            tree.snapshot("p1", 240, 0, 610, 680);
-            while (tree.move("p1", 500, 0)) {
+            var moveX = Math.round(width * 0.45);
+            tree.snapshot("p1", Math.round(width * 0.22), 0, Math.round(width * 0.55), height);
+            while (tree.move("p1", moveX, 0)) {
                 foot.draw();
                 $await(Jscex.Async.sleep(10));
             }
             foot.draw();
-            tree.snapshot("p2", 500, 0, 610, 680);
+            tree.snapshot("p2", moveX, 0, Math.round(width * 0.55), height);
 
-            // 会有闪烁不得意这样做, (＞﹏＜)
             canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
             canvas.css("background", "#ffe");
             $await(Jscex.Async.sleep(300));
@@ -198,7 +211,6 @@
         }));
 
         var jumpAnimate = eval(Jscex.compile("async", function () {
-            var ctx = tree.ctx;
             while (true) {
                 tree.ctx.clearRect(0, 0, width, height);
                 tree.jump();
@@ -232,7 +244,6 @@
         runAsync().start();
     })();
 </script>
-
 
 </body>
 </html>
