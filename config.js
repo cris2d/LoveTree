@@ -4,19 +4,22 @@ var config = {
     // você pode colocar 4, 2 ou quantas quiser
     lines: [
         "Meu amor,",
-        "As flores desabrocham numa estação, as pétalas caídas são testemunhas",
-        "Os anos que se foram, como confiar à poeira do tempo",
-        "Seu sorriso suave, é o que meu coração guarda para sempre",
-        "A saudade sincera, será que você entende um pouco?",
-        "Meu querido(a), você é meu único(a)",
-        "Te amo para sempre...",
+        "As flores florescem e o tempo passa, mas algumas coisas permanecem.",
+        "Entre todas elas, o lugar especial que você tem no meu coração.",
+        "Seu sorriso ilumina meus dias, sua companhia traz alegria aos momentos mais simples,",
+        "e seu jeito faz com que tudo seja um pouco mais bonito.",
+        "Você se tornou uma parte muito importante da minha vida,",
+        "alguém que admiro, valorizo e amo cada dia mais.",
+        "Se eu pudesse guardar algo para sempre,",
+        "seria a felicidade de ter você ao meu lado.",
+        "Eu te amo. ❤️",
     ],
     // Data em que se apaixonaram - IMPORTANTE: não altere o formato!
     // Formato: Ano-Mês-DiaThora:minuto:segundo
     //      Avisos importantes:
     //          1. Horas, minutos e segundos devem ter sempre dois dígitos  ex: 00:00:00
     //          2. O "T" não pode ser removido
-    date: "2017-07-20T20:15:00",
+    date: "2025-12-10T18:00:00",
     // Nome dos dois
-    names: ["Fulano", "Ciclana"]
+    names: ["Fulano", "Vitória Claudino"]
 }
