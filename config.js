@@ -10,7 +10,6 @@ var config = {
         "e seu jeito faz com que tudo seja um pouco mais bonito.",
         "Você se tornou uma parte muito importante da minha vida,",
         "alguém que admiro, valorizo e amo cada dia mais.",
-        "Se eu pudesse guardar algo para sempre,",
         "seria a felicidade de ter você ao meu lado.",
         "Eu te amo. ❤️",
     ],
@@ -19,7 +18,7 @@ var config = {
     //      Avisos importantes:
     //          1. Horas, minutos e segundos devem ter sempre dois dígitos  ex: 00:00:00
     //          2. O "T" não pode ser removido
-    date: "2025-12-10T18:00:00",
+    date: "2025-12-10T18:52:00",
     // Nome dos dois
-    names: ["Fulano", "Vitória Claudino"]
+    names: ["Vitória e Cristoffer"]
 }
