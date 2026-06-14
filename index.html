@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Story</title>
+    <title>Nossa História</title>
 
     <link type="text/css" rel="stylesheet" href="./index_files/default.css">
     <script type="text/javascript" src="./index_files/jquery.min.js"></script>
@@ -16,87 +16,14 @@
     <script type="text/javascript" src="./index_files/functions.js" charset="utf-8"></script>
     <script type="text/javascript" src="./index_files/love.js" charset="utf-8"></script>
     <script type="text/javascript" src="./config.js"></script>
-    <style type="text/css">
-        .STYLE1 { color: #666666 }
-
-        html, body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background: #ffe;
-        }
-
-        #main {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        /* O wrap mantém 1100x680 internamente mas é escalado via JS */
-        #wrap {
-            position: relative;
-            width: 1100px;
-            height: 680px;
-            transform-origin: top left;
-            /* scale aplicado via JS */
-        }
-
-        #text {
-            width: 400px;
-            height: 425px;
-            left: 60px;
-            top: 80px;
-            position: absolute;
-            z-index: 10;
-        }
-
-        #code {
-            display: none;
-            font-size: 22px;
-            line-height: 2;
-        }
-
-        #clock-box {
-            position: absolute;
-            left: 60px;
-            top: 520px;
-            font-size: 36px;
-            display: none;
-            z-index: 10;
-        }
-
-        #clock-box a { font-size: 36px; text-decoration: none; }
-        #clock { margin-left: 48px; }
-        #clock .digit { font-size: 80px; }
-
-        #canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 1100px;
-            height: 680px;
-        }
-
-        #error { margin: 0 auto; text-align: center; margin-top: 60px; display: none; }
-        .hand { cursor: pointer; }
-        .say { margin-left: 5px; }
-
-        .rotateImages {
-            -webkit-animation: myRotate 10s linear infinite;
-            animation: myRotate 10s linear infinite;
-        }
-        @keyframes myRotate {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
 </head>
 <body>
 
 <img id="music-btn" src="https://ajlovechina.github.io/loveBalloon/static/music.png"
-     style="position:fixed;z-index:10001;top:10px;right:10px;width:36px;height:36px;"
+     style="position:fixed;z-index:10001;top:10px;right:10px;width:40px;height:40px;cursor:pointer;"
      onclick="var m=document.querySelector('.song-audio-autoplay');if(m.paused){m.play();this.className='rotateImages'}else{m.pause();this.className=''}">
 <audio class="song-audio-autoplay" controls loop style="display:none;visibility:hidden">
-    <source src="https://drive.google.com/uc?export=download&id=1WhJ4EIufPEI6f5r3lMU1dbRjdII2BjLb" type="audio/mp3"/>
+    <source src="./index_files/music.mp3" type="audio/mp3"/>
 </audio>
 
 <div id="main">
@@ -115,32 +42,33 @@
 
 <script type="text/javascript">
     // Escala o #wrap para caber na tela mantendo proporção 1100x680
-    (function scaleWrap() {
+    function scaleWrap() {
         var wrap = document.getElementById('wrap');
         var scaleX = window.innerWidth / 1100;
         var scaleY = window.innerHeight / 680;
         var scale = Math.min(scaleX, scaleY);
         wrap.style.transform = 'scale(' + scale + ')';
         wrap.style.webkitTransform = 'scale(' + scale + ')';
-        // Centraliza
         var offsetX = (window.innerWidth - 1100 * scale) / 2;
         var offsetY = (window.innerHeight - 680 * scale) / 2;
         wrap.style.marginLeft = offsetX + 'px';
         wrap.style.marginTop = offsetY + 'px';
-    })();
+    }
+    scaleWrap();
+    window.addEventListener('resize', scaleWrap);
 
     // Monta o texto
     $('#code').html(config.lines.map(function(item) {
         return '<span class="say">' + item + '</span><br><span class="say"> </span><br>';
     }).join(''));
 
-    // Monta os nomes — suporta tanto array quanto string separada por "e"
+    // Monta os nomes
     var name0 = Array.isArray(config.names) ? config.names[0] : (config.names || '');
     var name1 = Array.isArray(config.names) ? config.names[1] : '';
     if (name1) {
-        $("#clock-box-inside-text").html(name0 + '<span class="STYLE1"> e </span>' + name1 + '<span class="STYLE1"> estão juntos há</span>');
+        $("#clock-box-inside-text").html(name0 + '<span style="color:#666"> e </span>' + name1 + '<span style="color:#666"> estão juntos há</span>');
     } else {
-        $("#clock-box-inside-text").html(name0 + '<span class="STYLE1"> estão juntos há</span>');
+        $("#clock-box-inside-text").html(name0 + '<span style="color:#666"> estão juntos há</span>');
     }
 </script>
 
@@ -153,7 +81,6 @@
             return false;
         }
 
-        // Canvas interno sempre 1100x680 — o scale no CSS cuida do resto
         var width = 1100;
         var height = 680;
 
@@ -200,20 +127,6 @@
         var seed = tree.seed;
         var foot = tree.footer;
         var hold = 1;
-
-        // Fator de escala para converter coordenadas de toque (tela) → canvas (1100x680)
-        function getTouchCanvasPos(touch) {
-            var wrap = document.getElementById('wrap');
-            var scaleX = window.innerWidth / 1100;
-            var scaleY = window.innerHeight / 680;
-            var scale = Math.min(scaleX, scaleY);
-            var offsetX = (window.innerWidth - 1100 * scale) / 2;
-            var offsetY = (window.innerHeight - 680 * scale) / 2;
-            return {
-                x: (touch.pageX - offsetX) / scale,
-                y: (touch.pageY - offsetY) / scale
-            };
-        }
 
         canvas.click(function (e) {
             var offset = canvas.offset(), x, y;
