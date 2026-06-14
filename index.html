@@ -152,15 +152,14 @@
             canvas.toggleClass('hand', seed.hover(x, y));
         });
 
-        // Suporte a toque (mobile)
+        // Suporte a toque (mobile) — qualquer toque na tela inicia a animação
         canvas[0].addEventListener('touchstart', function(e) {
             e.preventDefault();
-            var touch = e.touches[0];
-            var offset = canvas.offset();
-            var x = touch.pageX - offset.left;
-            var y = touch.pageY - offset.top;
-            if (seed.hover(x, y)) {
+            if (hold) {
                 hold = 0;
+                canvas.unbind("click");
+                canvas.unbind("mousemove");
+                canvas.removeClass('hand');
             }
         }, { passive: false });
 
