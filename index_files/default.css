@@ -1,64 +1,113 @@
-body{margin:0;padding:0;background:#ffe;font-size:14px;font-family:'微软雅黑','宋体',sans-serif;color:#231F20;overflow:hidden}
-a {color:#000;font-size:14px;}
+/* Reset */
+* { box-sizing: border-box; }
 
-#main{
-    width:100%;
-    height:100vh;
-    overflow:hidden;
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffe;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    font-family: 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+    color: #231F20;
 }
 
-#wrap{
-    position:relative;
-    margin:0 auto;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ffe;
 }
 
-#text{
-    width:36%;
-    height:62%;
-    left:5%;
-    top:12%;
-    position:absolute;
-    z-index:10;
+#main {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
 }
 
-#code{
-    display:none;
-    font-size:clamp(10px, 2.5vw, 16px);
-    line-height:1.6;
+/* O wrap é sempre 1100x680 internamente — o JS aplica scale para caber na tela */
+#wrap {
+    position: absolute;
+    width: 1100px;
+    height: 680px;
+    transform-origin: top left;
+    top: 0;
+    left: 0;
 }
 
+/* Texto (frases) — lado esquerdo */
+#text {
+    width: 400px;
+    height: 425px;
+    left: 60px;
+    top: 80px;
+    position: absolute;
+    z-index: 10;
+}
+
+#code {
+    display: none;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+}
+
+/* Relógio — canto inferior esquerdo, dentro do canvas de 1100x680 */
 #clock-box {
-    position:absolute;
-    left:5%;
-    bottom:5%;
-    font-size:clamp(14px, 3.5vw, 28px);
-    display:none;
-    z-index:10;
+    position: absolute;
+    left: 60px;
+    top: 520px;
+    font-size: 22px;
+    display: none;
+    z-index: 10;
+    color: #333;
+    line-height: 1.4;
 }
 
 #clock-box a {
-    font-size:clamp(14px, 3.5vw, 28px);
-    text-decoration:none;
+    font-size: 22px;
+    text-decoration: none;
 }
 
-#clock{margin-left:0;}
+#clock {
+    margin-left: 0;
+    margin-top: 4px;
+}
 
 #clock .digit {
-    font-size:clamp(28px, 7vw, 64px);
+    font-size: 52px;
+    font-weight: bold;
+    color: #231F20;
 }
 
-#canvas{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100% !important;
-    height:100% !important;
+/* Canvas ocupa exatamente o wrap */
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1100px;
+    height: 680px;
 }
 
-#error{margin:0 auto;text-align:center;margin-top:60px;display:none;}
-.hand{cursor:pointer;}
-.say{margin-left:5px;}
-.space{margin-right:150px;}
+#error {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 60px;
+    display: none;
+}
+
+.hand { cursor: pointer; }
+.say  { margin-left: 5px; }
+
+/* Botão de música girando */
+.rotateImages {
+    -webkit-animation: myRotate 3s linear infinite;
+    animation: myRotate 3s linear infinite;
+}
+@keyframes myRotate {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
